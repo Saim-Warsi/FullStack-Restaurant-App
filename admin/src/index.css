@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+body {
+  font-family: "Outfit", sans-serif;
+  box-sizing: border-box;
+}
+
+.active{
+  border: 1px solid #14532d; 
+  border-right: none;
+  background: #f0fdf4;
+}
+
+.disabled{
+  cursor: not-allowed;
+  background: lightpink;
+  
+}
+
+.disabled:hover{
+
+  color: white;
+}

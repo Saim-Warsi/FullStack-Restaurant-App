@@ -1,0 +1,11 @@
+
+
+import mongoose from "mongoose";
+
+const SubscriptionSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    subscribedAt: { type: Date, default: Date.now }
+});
+
+const SubscriptionModel = mongoose.model("Subscribers", SubscriptionSchema);
+export default SubscriptionModel;
