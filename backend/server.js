@@ -7,7 +7,7 @@ import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import statsRouter from "./routes/statsRoute.js";  
-import subscriptionRouter from "./routes/subscriptionRoute.js";
+import subscriptionRouter from "./routes/SubscriptionRoute.js";
 import tableRouter from "./routes/tableRoute.js"
 import reservationRouter from './routes/reservationRoute.js';
 import promoCodeRouter from "./routes/PromoCodeRoute.js";
