@@ -55,7 +55,7 @@ app.post('/api/subscribe', async (req, res) => {
         res.json({ success: false, message: 'Error subscribing' });
     }
 });
-// UPDATED: Add '0.0.0.0' host
+
 app.listen(port, '0.0.0.0', ()=>{
     console.log(`Server started on port ${port}`)
 })
