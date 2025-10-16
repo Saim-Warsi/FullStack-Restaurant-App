@@ -16,7 +16,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Profile from './components/Profile'
 import FoodDetails from './components/FoodDetails'
-import ScrollToTop from './components/ScrollToTop';
+import ScrollToTop from './components/scrollToTop';
 
 
 
