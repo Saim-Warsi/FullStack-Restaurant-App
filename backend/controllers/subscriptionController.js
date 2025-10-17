@@ -46,20 +46,6 @@ const sendPromotion = async (req, res) => {
             return res.json({ success: false, message: "No subscribers found" });
         }
 
-        res.json({ 
-            success: true, 
-            message: `Sending promotional email to ${subscribers.length} subscribers...` 
-        });
-
-        sendEmailsInBackground(subscribers, subject, message);
-
-    } catch (error) {
-        res.json({ success: false, message: "Error sending promotional emails" });
-    }
-};
-
-async function sendEmailsInBackground(subscribers, subject, message) {
-    try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -68,41 +54,50 @@ async function sendEmailsInBackground(subscribers, subject, message) {
             }
         });
 
-        const BATCH_SIZE = 10;
-        for (let i = 0; i < subscribers.length; i += BATCH_SIZE) {
-            const batch = subscribers.slice(i, i + BATCH_SIZE);
-            
-            const emailPromises = batch.map(subscriber => {
-                const mailOptions = {
-                    from: process.env.EMAIL_USER,
-                    to: subscriber.email,
-                    subject: subject,
-                    html: `
-                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                            <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 30px; text-align: center;">
-                                <h1 style="color: white; margin: 0;">Little Lemon</h1>
-                            </div>
-                            <div style="padding: 30px; background-color: #f9fafb;">
-                                <div style="white-space: pre-wrap;">${message}</div>
-                            </div>
-                            <div style="padding: 20px; text-align: center; background-color: #1f2937; color: white;">
-                                <p style="margin: 0; font-size: 12px;">© 2025 Little Lemon. All rights reserved.</p>
-                            </div>
-                        </div>
-                    `
-                };
-                
-                return transporter.sendMail(mailOptions).catch(() => {});
-            });
+        res.json({ 
+            success: true, 
+            message: `Sending promotional email to ${subscribers.length} subscribers...` 
+        });
 
-            await Promise.all(emailPromises);
-            
-            if (i + BATCH_SIZE < subscribers.length) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-        }
+        setImmediate(() => {
+            sendEmailsInBackground(subscribers, subject, message, transporter);
+        });
+
     } catch (error) {
+        res.json({ success: false, message: "Error sending promotional emails" });
     }
+};
+
+async function sendEmailsInBackground(subscribers, subject, message, transporter) {
+    for (const subscriber of subscribers) {
+        try {
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: subscriber.email,
+                subject: subject,
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 30px; text-align: center;">
+                            <h1 style="color: white; margin: 0;">Little Lemon</h1>
+                        </div>
+                        <div style="padding: 30px; background-color: #f9fafb;">
+                            <div style="white-space: pre-wrap;">${message}</div>
+                        </div>
+                        <div style="padding: 20px; text-align: center; background-color: #1f2937; color: white;">
+                            <p style="margin: 0; font-size: 12px;">© 2025 Little Lemon. All rights reserved.</p>
+                        </div>
+                    </div>
+                `
+            };
+            
+            await transporter.sendMail(mailOptions);
+            console.log(`Email sent to ${subscriber.email}`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (error) {
+            console.error(`Failed to send to ${subscriber.email}:`, error.message);
+        }
+    }
+    console.log('All emails processed');
 }
 
 export { subscribeEmail, getSubscribers, sendPromotion };
