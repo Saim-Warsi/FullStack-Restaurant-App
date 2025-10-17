@@ -52,7 +52,7 @@ const getSubscribers = async (req, res) => {
 //         message: "Subject and message are required",
 //       });
 //     }
-
+///////////////////////////////////////////////////////////////////////////////
 //     // Get all subscribers
 //     const subscribers = await SubscriptionModel.find({});
 
@@ -118,59 +118,105 @@ const getSubscribers = async (req, res) => {
 //   }
 // };
 
-
 const sendPromotion = async (req, res) => {
     try {
         const { subject, message } = req.body;
-        // ... (check for subject/message and subscribers.length) ...
 
-        // ... (transporter creation) ...
+        if (!subject || !message) {
+            return res.json({
+                success: false,
+                message: "Subject and message are required",
+            });
+        }
 
-        // Create an array of email promises
+        // Get all subscribers
+        const subscribers = await SubscriptionModel.find({});
+
+        if (subscribers.length === 0) {
+            return res.json({ success: false, message: "No subscribers found" });
+        }
+
+        // Configure nodemailer transporter (Using your App Password env vars)
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD, // This should be the Gmail App Password
+            },
+            tls: {
+                rejectUnauthorized: false,
+            },
+        });
+
+        // 1. Create an array of email promises
         const emailPromises = subscribers.map((subscriber) => {
             const mailOptions = {
-                // ... (mail options) ...
+                from: process.env.EMAIL_USER,
+                to: subscriber.email,
+                subject: subject,
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 30px; text-align: center;">
+                            <h1 style="color: white; margin: 0;">Little Lemon</h1>
+                        </div>
+                        <div style="padding: 30px; background-color: #f9fafb;">
+                            <div style="white-space: pre-wrap;">${message}</div>
+                        </div>
+                        <div style="padding: 20px; text-align: center; background-color: #1f2937; color: white;">
+                            <p style="margin: 0; font-size: 12px;">© 2025 Little Lemon. All rights reserved.</p>
+                        </div>
+                    </div>
+                `,
             };
             return transporter.sendMail(mailOptions);
         });
 
-        // 🛑 CRITICAL CHANGE: Use Promise.allSettled to track success/failure for each email
+        // 2. Wait for all emails to settle (success or failure)
         const results = await Promise.allSettled(emailPromises);
 
-        // Analyze the results
+        // 3. Analyze the results
         const failedEmails = results.filter(result => result.status === 'rejected');
         const successfulEmails = results.filter(result => result.status === 'fulfilled');
 
         if (failedEmails.length > 0) {
             // Log the errors for debugging (check your Railway logs!)
             failedEmails.forEach((failure, index) => {
-                console.error(`Email to subscriber ${index + 1} failed:`, failure.reason);
+                // Find the index of the failed email to get the subscriber's email
+                const originalIndex = results.findIndex(r => r === failure);
+                if (originalIndex !== -1) {
+                    console.error(`Email to ${subscribers[originalIndex].email} failed:`, failure.reason);
+                } else {
+                    console.error("An email failed to send (details below):", failure.reason);
+                }
             });
             
-            // If some succeed but some fail, return a mixed success message
+            // If some succeed but some fail, return a partial success message
             if (successfulEmails.length > 0) {
                 return res.json({
-                    success: true, // Still technically a success as some were sent
-                    message: `Promotional email sent to ${successfulEmails.length} subscribers. ${failedEmails.length} emails failed to send. Check logs for details.`,
+                    success: true,
+                    message: `Promotional email sent to ${successfulEmails.length} subscribers. ${failedEmails.length} emails failed. Check server logs for details.`,
                 });
             } else {
-                 // If ALL fail, treat as a complete failure
+                 // If ALL fail, return a complete failure message
                 return res.json({
                     success: false,
-                    message: "All promotional emails failed to send. Check logs for details.",
+                    message: "All promotional emails failed to send. Check server logs for details.",
                 });
             }
         }
 
-        // Only return true success if ALL promises were fulfilled
+        // 4. Return true success if ALL promises were fulfilled
         res.json({
             success: true,
             message: `Promotional email sent to ${successfulEmails.length} subscribers!`,
         });
 
     } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "A server error occurred during email processing." });
+        // This catch block handles critical errors like DB connection issues, or transporter creation failure.
+        console.log(error); 
+        res.json({ success: false, message: "Critical server error during email process. Check logs." });
     }
 };
 
