@@ -15,7 +15,7 @@ import TableReservation from './pages/tableReservation.jsx'
 
 
 const App = () => {
-    const url = "http://localhost:4000"
+    const url = "https://little-lemon-restaurant.up.railway.app"
   return (
       <>
       <ToastContainer/>

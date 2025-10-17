@@ -3,7 +3,7 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [showPopup, setShowPopup] = useState(false);
-  const backendUrl = "http://localhost:4000";
+  const backendUrl = "https://little-lemon-restaurant.up.railway.app";
 
   const contextValue = {
     showPopup,
