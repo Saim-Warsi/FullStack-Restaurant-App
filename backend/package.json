@@ -7,10 +7,11 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-      "start": "node server.js",
+    "start": "node server.js",
     "server": "nodemon server.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
