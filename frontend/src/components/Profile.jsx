@@ -14,7 +14,7 @@ const Profile = () => {
     const [message, setMessage] = useState('');
 
     // Replace with your actual backend URL
-    const backendUrl = 'http://localhost:4000';
+    const backendUrl = 'https://little-lemon-restaurant.up.railway.app';
 
     useEffect(() => {
         fetchUserProfile();
