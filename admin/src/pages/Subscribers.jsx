@@ -38,7 +38,7 @@ const Subscribers = ({ url }) => {
     sub.email.toLowerCase().includes(search.toLowerCase())
   );
 
- const handleSendPromotion = async () => {
+  const handleSendPromotion = async () => {
     if (!emailSubject.trim() || !emailBody.trim()) {
       toast.error("Please fill in both subject and message");
       return;
@@ -55,12 +55,10 @@ const Subscribers = ({ url }) => {
       const response = await axios.post(`${url}/api/subscription/send-promotion`, {
         subject: emailSubject,
         message: emailBody
-      }, {
-        timeout: 120000
       });
 
-      if (response.data.success === true || response.status === 200) {
-        toast.success(response.data.message || "Promotional emails sent successfully!");
+      if (response.data.success) {
+        toast.success(response.data.message);
         setSent(true);
         setTimeout(() => {
           setShowEmailModal(false);
@@ -72,15 +70,8 @@ const Subscribers = ({ url }) => {
         toast.error(response.data.message || "Failed to send emails");
       }
     } catch (error) {
-      if (error.code === 'ECONNABORTED') {
-        toast.error("Request timed out. The emails might still be sending.");
-      } else if (error.response) {
-        toast.error(error.response.data?.message || "Server error occurred");
-      } else if (error.request) {
-        toast.error("No response from server. Please check your connection.");
-      } else {
-        toast.error("Error sending promotional emails");
-      }
+      toast.error("Error sending promotional emails");
+      console.error("Error:", error);
     } finally {
       setSending(false);
     }
