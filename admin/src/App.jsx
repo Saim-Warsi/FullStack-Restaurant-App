@@ -9,7 +9,7 @@ import Orders from './pages/Orders.jsx'
 import List from './pages/List.jsx'
 import Home from './pages/Home.jsx'
 import PromoCodes from './pages/PromoCodes.jsx'
-import TableReservation from './pages/tableReservation.jsx'
+import TableReservation from './pages/TableReservation.jsx'
 
 
 
