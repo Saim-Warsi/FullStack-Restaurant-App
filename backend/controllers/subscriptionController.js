@@ -1,37 +1,46 @@
 import SubscriptionModel from "../models/SubscriptionModel.js";
 import nodemailer from "nodemailer";
 
+
+// Subscribe a new email
 const subscribeEmail = async (req, res) => {
     try {
         const { email } = req.body;
 
+        // Validate email
         if (!email || !email.includes('@')) {
             return res.json({ success: false, message: "Invalid email address" });
         }
 
+        // Check if email already exists
         const existingSubscription = await SubscriptionModel.findOne({ email });
         if (existingSubscription) {
             return res.json({ success: false, message: "Email already subscribed" });
         }
 
+        // Create new subscription
         const subscription = new SubscriptionModel({ email });
         await subscription.save();
 
         res.json({ success: true, message: "Subscribed successfully!" });
     } catch (error) {
+        console.log("Subscription error:", error);
         res.json({ success: false, message: "Error subscribing" });
     }
 };
 
+// Get all subscribers
 const getSubscribers = async (req, res) => {
     try {
         const subscribers = await SubscriptionModel.find({}).sort({ subscribedAt: -1 });
         res.json({ success: true, data: subscribers });
     } catch (error) {
+        console.log(error);
         res.json({ success: false, message: "Error fetching subscribers" });
     }
 };
 
+// Send promotional email to all subscribers
 const sendPromotion = async (req, res) => {
     try {
         const { subject, message } = req.body;
@@ -40,12 +49,14 @@ const sendPromotion = async (req, res) => {
             return res.json({ success: false, message: "Subject and message are required" });
         }
 
+        // Get all subscribers
         const subscribers = await SubscriptionModel.find({});
         
         if (subscribers.length === 0) {
             return res.json({ success: false, message: "No subscribers found" });
         }
 
+        // Configure nodemailer transporter
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -54,23 +65,8 @@ const sendPromotion = async (req, res) => {
             }
         });
 
-        res.json({ 
-            success: true, 
-            message: `Sending promotional email to ${subscribers.length} subscribers...` 
-        });
-
-        setImmediate(() => {
-            sendEmailsInBackground(subscribers, subject, message, transporter);
-        });
-
-    } catch (error) {
-        res.json({ success: false, message: "Error sending promotional emails" });
-    }
-};
-
-async function sendEmailsInBackground(subscribers, subject, message, transporter) {
-    for (const subscriber of subscribers) {
-        try {
+        // Send emails to all subscribers
+        const emailPromises = subscribers.map(subscriber => {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: subscriber.email,
@@ -79,6 +75,7 @@ async function sendEmailsInBackground(subscribers, subject, message, transporter
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                         <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 30px; text-align: center;">
                             <h1 style="color: white; margin: 0;">Little Lemon</h1>
+                          
                         </div>
                         <div style="padding: 30px; background-color: #f9fafb;">
                             <div style="white-space: pre-wrap;">${message}</div>
@@ -89,15 +86,19 @@ async function sendEmailsInBackground(subscribers, subject, message, transporter
                     </div>
                 `
             };
-            
-            await transporter.sendMail(mailOptions);
-            console.log(`Email sent to ${subscriber.email}`);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch (error) {
-            console.error(`Failed to send to ${subscriber.email}:`, error.message);
-        }
+            return transporter.sendMail(mailOptions);
+        });
+
+        await Promise.all(emailPromises);
+
+        res.json({ 
+            success: true, 
+            message: `Promotional email sent to ${subscribers.length} subscribers` 
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error sending promotional emails" });
     }
-    console.log('All emails processed');
-}
+};
 
 export { subscribeEmail, getSubscribers, sendPromotion };
