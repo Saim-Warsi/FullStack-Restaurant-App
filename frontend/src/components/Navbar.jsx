@@ -79,7 +79,7 @@ const Navbar = ({ setShowLogin }) => {
         {!token ? (
           <button
             onClick={() => setShowLogin(true)}
-            className="hidden sm:block bg-yellow-300 px-4 py-2 rounded-full text-xl hover:bg-transparent border-2 border-white hover:text-green-900 hover:border-green-900 transition ease-in-out duration-300"
+            className=" bg-yellow-300 px-4 py-2 rounded-full text-xl hover:bg-transparent border-2 border-white hover:text-green-900 hover:border-green-900 transition ease-in-out duration-300"
           >
             Sign in
           </button>
