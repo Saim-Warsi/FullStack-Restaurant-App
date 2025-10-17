@@ -60,7 +60,6 @@ const TableReservation = () => {
           const timeMatch = res.time === time;
           const statusMatch = res.status === 'confirmed' || res.status === 'pending';
 
-
           return tableIdMatch && dateMatch && timeMatch && statusMatch;
         });
 
@@ -155,20 +154,20 @@ const TableReservation = () => {
         />
       )}
 
-      <div  id="table-reservation" className="container w-[80vw] bg-gray-50 rounded-3xl py-10 md:px-5 px-[5px] mt-20 shadow-lg">
-        <h1 className="text-3xl font-bold mb-3 text-center">
+      <div id="table-reservation" className="container  bg-gray-50 rounded-3xl py-6 md:py-10 px-3 md:px-5 mt-20 shadow-lg">
+        <h1 className="text-2xl md:text-3xl font-bold mb-3 text-center">
           Table Reservation
         </h1>
-        <p className="text-sm text-green-800 text-center">
+        <p className="text-xs md:text-sm text-green-800 text-center px-2">
           Reserve the available tables, come to our restaurant and let us serve you.
         </p>
 
         {/* Date and Time Selection */}
-        <div className="bg-white rounded-lg mt-5 p-6 shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Select Date & Time</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-lg mt-5 p-4 md:p-6 shadow-md">
+          <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Select Date & Time</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="date" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                 Date *
               </label>
               <input
@@ -177,11 +176,11 @@ const TableReservation = () => {
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 min={getTodayDate()}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors"
+                className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors"
               />
             </div>
             <div>
-              <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="time" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                 Time *
               </label>
               <input
@@ -189,23 +188,23 @@ const TableReservation = () => {
                 id="time"
                 value={selectedTime}
                 onChange={(e) => setSelectedTime(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors"
+                className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors"
               />
             </div>
           </div>
-          <p className="mt-3 text-xs text-gray-500 text-center">
+          <p className="mt-3 text-[10px] md:text-xs text-gray-500 text-center">
             Availability updates automatically when you change date or time
           </p>
         </div>
 
         {/* Tables List */}
-        <div className="bg-white rounded-lg mt-5 w-full flex flex-col max-h-[600px]">
+        <div className="bg-white rounded-lg mt-5 w-full flex flex-col max-h-[500px] md:max-h-[600px]">
           {/* Header */}
-          <div className="bg-yellow-500 rounded-lg px-6 py-5 sm:px-8 flex-shrink-0">
-            <h2 className="text-xl sm:text-2xl font-semibold text-white">
+          <div className="bg-yellow-500 rounded-lg px-4 md:px-6 py-4 md:py-5 flex-shrink-0">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-white">
               Available Tables
             </h2>
-            <p className="mt-1 text-sm text-white">
+            <p className="mt-1 text-xs md:text-sm text-white">
               {selectedDate && selectedTime 
                 ? `Showing availability for ${new Date(selectedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at ${selectedTime}`
                 : "Select date and time to check availability"
@@ -220,78 +219,110 @@ const TableReservation = () => {
           ) : (
             <>
               {!selectedDate || !selectedTime ? (
-                <div className="p-8 text-center text-gray-500">
-                  <p className="text-lg mb-2">Please select date and time</p>
-                  <p className="text-sm">Choose your preferred date and time to see available tables</p>
+                <div className="p-6 md:p-8 text-center text-gray-500">
+                  <p className="text-base md:text-lg mb-2">Please select date and time</p>
+                  <p className="text-xs md:text-sm">Choose your preferred date and time to see available tables</p>
                 </div>
               ) : tables.length === 0 ? (
-                <p className="p-4 text-center text-gray-500">No tables available yet.</p>
+                <p className="p-4 text-center text-sm md:text-base text-gray-500">No tables available yet.</p>
               ) : (
                 <div className="flex flex-col flex-1 min-h-0">
-                  {/* Header Row */}
-                  <div className="py-2 px-5 m-4 mb-2 grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-4 gap-2 sm:gap-4 rounded-lg text-yellow-500 border-2 border-yellow-500 flex-shrink-0">
-                    <h3 className="font-medium text-xs sm:text-sm">Name</h3>
-                    <p className="font-medium text-center text-xs sm:text-sm">Capacity</p>
-                    <p className="font-medium text-center text-xs sm:text-sm">Status</p>
-                    <p className="font-medium text-center text-xs sm:text-sm">Reserve</p>
+                  {/* Header Row - Hidden on mobile, shown on md+ */}
+                  <div className="hidden md:grid py-2 px-5 m-4 mb-2 grid-cols-4 gap-4 rounded-lg text-yellow-500 border-2 border-yellow-500 flex-shrink-0">
+                    <h3 className="font-medium text-sm">Name</h3>
+                    <p className="font-medium text-center text-sm">Capacity</p>
+                    <p className="font-medium text-center text-sm">Status</p>
+                    <p className="font-medium text-center text-sm">Reserve</p>
                   </div>
 
                   {/* Scrollable List */}
-                  <div className="overflow-y-auto custom-scrollbar flex-1 px-4">
+                  <div className="overflow-y-auto custom-scrollbar flex-1 px-3 md:px-4">
                     {tables.map((table, index) => (
                       <div
-                        className="py-3 px-5 mb-3 rounded-lg border border-gray-200 grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-4 gap-2 sm:gap-4 items-center hover:bg-gray-50 transition-colors"
+                        className="py-3 px-3 md:px-5 mb-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
                         key={table._id || index}
                       >
-                        {/* Table Name */}
-                        <h3 className="text-gray-800 text-sm sm:text-base truncate">
-                          {table.name}
-                        </h3>
-
-                        {/* Capacity */}
-                        <p className="text-gray-600 text-center text-sm sm:text-base">
-                          {table.capacity} seats
-                        </p>
-
-                        {/* Status Badge (Non-clickable, just informational) */}
-                        <div className="flex justify-center">
-                          <span
-                            className={`px-2 py-1 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap ${
-                              table.isReserved
-                                ? "bg-red-100 text-red-700"
-                                : "bg-green-100 text-green-700"
-                            }`}
-                          >
-                            {table.isReserved ? "Reserved" : "Available"}
-                          </span>
-                        </div>
-
-                        {/* Reserve Button */}
-                        <div className="flex justify-center">
+                        {/* Mobile Layout (stacked) */}
+                        <div className="md:hidden flex flex-col gap-2">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <h3 className="text-gray-800 text-sm font-semibold mb-1">
+                                {table.name}
+                              </h3>
+                              <p className="text-gray-600 text-xs">
+                                Capacity: {table.capacity} seats
+                              </p>
+                            </div>
+                            <span
+                              className={`px-2 py-1 rounded-full text-[10px] font-medium whitespace-nowrap ${
+                                table.isReserved
+                                  ? "bg-red-100 text-red-700"
+                                  : "bg-green-100 text-green-700"
+                              }`}
+                            >
+                              {table.isReserved ? "Reserved" : "Available"}
+                            </span>
+                          </div>
                           <button
                             onClick={() => handleReserveClick(table)}
                             disabled={table.isReserved}
-                            className={`text-xs md:text-sm px-3 py-1 rounded transition-all ${
+                            className={`w-full text-xs py-2 px-3 rounded transition-all font-medium ${
                               table.isReserved
-                                ? "text-gray-400 cursor-not-allowed"
-                                : "text-blue-600 hover:text-blue-800 hover:bg-blue-50 cursor-pointer"
+                                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                : "bg-blue-50 text-blue-600 hover:bg-blue-100 cursor-pointer"
                             }`}
                           >
-                            <span className="hidden sm:inline">
-                              {table.isReserved ? "Not Available" : "Click to Reserve"}
-                            </span>
-                            <span className="sm:hidden">
-                              {table.isReserved ? "N/A" : "Reserve"}
-                            </span>
+                            {table.isReserved ? "Not Available" : "Click to Reserve"}
                           </button>
+                        </div>
+
+                        {/* Desktop Layout (grid) */}
+                        <div className="hidden md:grid grid-cols-4 gap-4 items-center">
+                          {/* Table Name */}
+                          <h3 className="text-gray-800 text-sm lg:text-base truncate">
+                            {table.name}
+                          </h3>
+
+                          {/* Capacity */}
+                          <p className="text-gray-600 text-center text-sm lg:text-base">
+                            {table.capacity} seats
+                          </p>
+
+                          {/* Status Badge */}
+                          <div className="flex justify-center">
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                                table.isReserved
+                                  ? "bg-red-100 text-red-700"
+                                  : "bg-green-100 text-green-700"
+                              }`}
+                            >
+                              {table.isReserved ? "Reserved" : "Available"}
+                            </span>
+                          </div>
+
+                          {/* Reserve Button */}
+                          <div className="flex justify-center">
+                            <button
+                              onClick={() => handleReserveClick(table)}
+                              disabled={table.isReserved}
+                              className={`text-sm px-3 py-1 rounded transition-all ${
+                                table.isReserved
+                                  ? "text-gray-400 cursor-not-allowed"
+                                  : "text-blue-600 hover:text-blue-800 hover:bg-blue-50 cursor-pointer"
+                              }`}
+                            >
+                              {table.isReserved ? "Not Available" : "Click to Reserve"}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
 
                   {/* Summary */}
-                  <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                    <p className="text-sm text-gray-600 text-center">
+                  <div className="px-4 md:px-6 py-3 md:py-4 bg-gray-50 border-t border-gray-200 flex-shrink-0">
+                    <p className="text-xs md:text-sm text-gray-600 text-center">
                       {tables.filter(t => !t.isReserved).length} of {tables.length} tables available for selected date and time
                     </p>
                   </div>
@@ -305,7 +336,12 @@ const TableReservation = () => {
       {/* Custom Scrollbar Styles */}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
+          width: 6px;
+        }
+        @media (min-width: 768px) {
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+          }
         }
         .custom-scrollbar::-webkit-scrollbar-track {
           background: #f1f5f9;

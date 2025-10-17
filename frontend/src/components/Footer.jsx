@@ -13,19 +13,7 @@ const Footer = () => {
   const [data, setData] = useState('');
   const {url} = useContext(StoreContext);
   const [subErr, setSubErr] = useState("")
- 
-  // const onSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   // console.log(data);
-  //   axios.post(`${url}/api/subscribe`, {email: data})
-  //     .then(response => {
-  //       setSubErr("Subscribed successfully!");
-  //       setData('');
-  //     })
-  //     .catch(error => {
-  //       setSubErr("Please try again.");
-  //     });
-  // }
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
     axios.post(`${url}/api/subscription/subscribe`, {email: data})
@@ -194,36 +182,41 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Newsletter section */}
-          <div className="bg-green-800/30 rounded-xl p-6 lg:p-8 mb-8 border border-green-700/50">
-            <div className="text-center max-w-2xl mx-auto">
-              <h4 className="text-xl font-bold text-yellow-400 mb-3">
-                Stay Connected
-              </h4>
-              <p className="text-green-100 mb-6">
-                Subscribe to our newsletter for exclusive offers and updates on
-                new dishes!
-              </p>
-              <div >
-                <form onSubmit={onSubmitHandler} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  onChange={(e)=>{setData(e.target.value)}}
-                  value={data.name}
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="flex-1 px-4 py-3 bg-white/10 border border-green-600/50 rounded-full text-white placeholder-green-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-                />
-                <button type="submit"  className="rounded-full px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-green-900 font-semibold transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-300">
-                  Subscribe
-                </button>
-                <span>
-                  {subErr && <p className="text-green-500 mt-2 text-center">{subErr}</p>}
-                </span>
-                </form>
-              </div>
-            </div>
-          </div>
-
+{/* Newsletter section */}
+<div className="bg-green-800/30 rounded-xl p-4 sm:p-6 lg:p-8 mb-6 md:mb-8 border border-green-700/50">
+  <div className="text-center max-w-2xl mx-auto">
+    <h4 className="text-lg sm:text-xl font-bold text-yellow-400 mb-2 sm:mb-3">
+      Stay Connected
+    </h4>
+    <p className="text-sm sm:text-base text-green-100 mb-4 sm:mb-6 px-2">
+      Subscribe to our newsletter for exclusive offers and updates on
+      new dishes!
+    </p>
+    <div>
+      <form onSubmit={onSubmitHandler} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto px-2 sm:px-0">
+        <input
+          onChange={(e) => {setData(e.target.value)}}
+          value={data}
+          type="email"
+          placeholder="Enter your email address"
+          required
+          className="flex-1 px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-white/10 border border-green-600/50 rounded-full text-white placeholder-green-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
+        />
+        <button 
+          type="submit"  
+          className="rounded-full px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-yellow-400 hover:bg-yellow-500 text-green-900 font-semibold transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-300 active:scale-95 whitespace-nowrap"
+        >
+          Subscribe
+        </button>
+      </form>
+      {subErr && (
+        <p className="text-green-300 text-xs sm:text-sm mt-3 sm:mt-4 text-center font-medium">
+          {subErr}
+        </p>
+      )}
+    </div>
+  </div>
+</div>
           {/* Bottom section */}
           <div className="border-t border-green-700/50 pt-8">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
