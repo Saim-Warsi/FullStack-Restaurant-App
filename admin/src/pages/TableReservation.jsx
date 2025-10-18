@@ -148,7 +148,7 @@ const TableReservation = () => {
       <div className="max-w-7xl mx-auto  h-[80vh] overflow-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Add Table Section */}
-          <div className="bg-white rounded-xl  shadow-md border border-gray-200 overflow-hidden h-[50vh]">
+          <div className="bg-white rounded-xl  shadow-md border border-gray-200 overflow-hidden h-[60vh]">
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 px-6 sm:px-8 py-4 sm:py-5 border-b border-yellow-100">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center flex-shrink-0">
