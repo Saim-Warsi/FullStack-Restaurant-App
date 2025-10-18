@@ -226,7 +226,7 @@ const TableReservation = () => {
           </div>
 
           {/* List Section */}
-          <div className="bg-white rounded-xl  shadow-md border border-gray-200 h-[45vh] md:h-[50vh] overflow-auto">
+          <div className="bg-white rounded-xl  shadow-md border border-gray-200 h-[45vh] md:h-[60vh] overflow-auto">
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 px-6 sm:px-8 py-4 sm:py-5 border-b border-yellow-100">
               <h2 className="text-lg sm:text-xl font-bold text-gray-900">
                 Existing Tables
