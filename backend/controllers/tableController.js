@@ -13,7 +13,6 @@ const addTables = async (req,res)=>{
     } else{
         const newTable = new tableModel({
             name: name,
-            // reserved: false,
             capacity: capacity
         }) 
         const table = await newTable.save();
