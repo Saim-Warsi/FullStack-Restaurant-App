@@ -17,7 +17,7 @@ A modern full-stack restaurant application built with the MERN stack.
   
 
 
-<!-- <p align="center"><a target="_blank" href="https://little-lemon-live.netlify.app/">Check the live demo</a></p> -->
+
 <p align="center">
   <a href="https://little-lemon-live.netlify.app/" target="_blank">
     <img src="https://img.shields.io/badge/Live%20Demo-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Live Demo"/>
