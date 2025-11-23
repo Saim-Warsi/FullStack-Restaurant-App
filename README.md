@@ -3,7 +3,7 @@
 A modern full-stack restaurant application built with the MERN stack.
 
 ## Features
-- Ordering Browse menu and place orders
+- Ordering - Browse menu and place orders
 - User Authentication - Secure login/registration
 - Admin Dashboard - Manage menu, orders & inventory
 - Table Reservations - Book tables online
